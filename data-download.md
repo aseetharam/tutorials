@@ -1,6 +1,6 @@
 ## Downloading Data from NCBI:
 
-Since we decided to use the  bioproject id PRJNA437979 (https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE111730), we have to download 12 files. We will use the SRA ids to download. You should already have the SRA ids by now. If not, go the the SRA database,search for the bioproject id, go to run selector and download the table.
+Since we decided to use the  bioproject id [PRJNA437979](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE111730), we have to download 12 files. We will use the SRA ids to download. You should already have the SRA ids by now. If not, go the the SRA database,search for the bioproject id, go to run selector and download the table.
 
 Next, copy the SRR files to the HPC class cluster (not in the home dir, but it should go to project temp directory).
  
