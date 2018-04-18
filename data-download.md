@@ -4,7 +4,7 @@ Since we decided to use the  bioproject id [PRJNA437979](https://www.ncbi.nlm.ni
 
 Next, copy the SRR files to the HPC class cluster (not in the home dir, but it should go to project temp directory).
  
-1. Request a allocation (compute node)
+### 1. Request a allocation (compute node)
 
 ```
 salloc -N 1 -n 16 -t 8:00:00
@@ -12,7 +12,7 @@ salloc -N 1 -n 16 -t 8:00:00
 
 Once alloted, load the module `sratoolkit` for prefetching and converting the SRA files.
 
-2. Downlaod data
+### 2. Downlaod data
 
 Load the module
 ```
@@ -42,7 +42,7 @@ replace the `<SRA_ID>` with SRA ids.
 After finishing this, you will have 12 `fastq` files that are gzipped (files ending with `fastq.gz`). You should be good to run `fastqc` on them.
 
 
-3. Running fastqc:
+### 3. Running fastqc:
 
 make sure you are on compute node. If you are not, run the salloc command to get one. Load the module needed for running quality check. 
 
