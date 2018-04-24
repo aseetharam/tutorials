@@ -5,7 +5,7 @@ Based on fastqc report, we will have to remove the based with low quality scores
 First open an interactive session on HPC-class
 
 ```
-sallco -N 1 -n 16 -t 4:00:00
+salloc -N 1 -n 16 -t 4:00:00
 ```
 
 Load the required modules:
