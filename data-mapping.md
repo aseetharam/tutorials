@@ -27,5 +27,52 @@ STAR \
   --genomeFastaFiles Mus_musculus.GRCm38.dna.toplevel.fa \
   --sjdbGTFfile Mus_musculus.GRCm38.92.gtf \
   --sjdbOverhang 74
-  limitGenomeGenerateRAM=3100000000000
+  --limitGenomeGenerateRAM=33524399488
 ```
+
+Once this is done, we can map each pair of fastq files (trimmed) to the refernece genome (indexed)
+
+Again, look up the manual and see the command that you need to run for mapping fastq files in pairs.
+
+
+```
+STAR \
+ --runMode alignReads \
+ --runThreadN 16 \
+ --genomeDir mm10_star \
+ --readFilesCommand zcat \
+ --outFileNamePrefix OUTPURNAME_star \
+ --readFilesIn INPUT_1.fq INPUT_2.fq
+```
+
+Since we need to run this for all 12 files, we will create a submission script and run them all separately.
+
+First, let's create a run script:
+
+```
+nano runSTAR.sh
+```
+
+paste the following contents in the file you're editing:
+
+```
+#!/bin/bash
+R1="$1"
+R2="$2"
+OUT=$(basename ${R1} |cut -f 1 -d "_");
+GFF="Mus_musculus.GRCm38.92.gtf"
+DB="mm10_star"
+STAR \
+ --runMode alignReads \
+ --runThreadN 16 \
+ --genomeDir ${DB} \
+ --readFilesCommand zcat \
+ --outFileNamePrefix ${OUT}_star \
+--readFilesIn ${R1} ${R2}
+```
+
+Now, if you run this as:
+```
+./runSTAR.sh SRR6827002_trimmed_1.fq SRR6827002_trimmed_2.fq
+```
+it will execute  the STAR aligner with all the options that you put in that run script. It is easier to run like this on many files (12 in this case)
