@@ -43,7 +43,7 @@ based on these information, our command should look something like this:
 trimmomatic \
     PE \
     -phred33 \
-    -trimlog SRR6826996_trim.log
+    -trimlog SRR6826996_trim.log \
     -threads 16 \
     SRR6826996_1.fastq.gz SRR6826996_2.fastq.gz \
     -baseout SRR6826996 \
