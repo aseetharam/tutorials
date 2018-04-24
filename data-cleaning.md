@@ -29,11 +29,11 @@ ILLUMINACLIP:TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLE
 ```
 This will perform the following:
 
-    Remove adapters (ILLUMINACLIP:TruSeq3-PE.fa:2:30:10)
-    Remove leading low quality or N bases (below quality 3) (LEADING:3)
-    Remove trailing low quality or N bases (below quality 3) (TRAILING:3)
-    Scan the read with a 4-base wide sliding window, cutting when the average quality per base drops below 15 (SLIDINGWINDOW:4:15)
-    Drop reads below the 36 bases long (MINLEN:36)
+1. Remove adapters (ILLUMINACLIP:TruSeq3-PE.fa:2:30:10)
+2. Remove leading low quality or N bases (below quality 3) (LEADING:3)
+3. Remove trailing low quality or N bases (below quality 3) (TRAILING:3)
+4. Scan the read with a 4-base wide sliding window, cutting when the average quality per base drops below 15 (SLIDINGWINDOW:4:15)
+6. Drop reads below the 36 bases long (MINLEN:36)
 
 Let's go with the default for now and see what it does for our files.
 
