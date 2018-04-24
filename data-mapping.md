@@ -3,7 +3,7 @@
 
 Let's find the latest reference genome along with its feature file (GFF3 or GTF files describing genes and other features on the reference genome). Popular choices to download the genomes include [UCSC](http://hgdownload.cse.ucsc.edu/downloads.html), [NCBI](https://www.ncbi.nlm.nih.gov/genome/), [ensembl](http://ensemblgenomes.org/) etc.
 
-Let's use the `[ensemblgenomes](http://useast.ensembl.org/Mus_musculus/Info/Index)` for our project. You're welcome to try other genomes as well, and there is no rational behind selecting one source over the other.
+Let's use the [ensemblgenomes](http://useast.ensembl.org/Mus_musculus/Info/Index) for our project. You're welcome to try other genomes as well, and there is no rational behind selecting one source over the other.
 
 ```
 wget ftp://ftp.ensembl.org/pub/release-92/fasta/mus_musculus/dna/Mus_musculus.GRCm38.dna.toplevel.fa.gz
@@ -18,6 +18,7 @@ Before mapping, you need to create index files for your genomes. Open up the man
 For indexing files:
 
 ```
+salloc -N 16 -n 1 -t 8:00:00
 module load star
 mkdir mm10_star
 STAR \
@@ -30,11 +31,11 @@ STAR \
   --limitGenomeGenerateRAM=33524399488
 ```
 
-Once this is done, we can map each pair of fastq files (trimmed) to the refernece genome (indexed)
+Once this is done, we can map each pair of `fastq` files (trimmed) to the reference genome (indexed)
 
-Again, look up the manual and see the command that you need to run for mapping fastq files in pairs.
+Again, look up the [manual](https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf) and see the command that you need to run for mapping `fastq` files in pairs.
 
-
+An example command you need to run, looks like this
 ```
 STAR \
  --runMode alignReads \
@@ -44,6 +45,7 @@ STAR \
  --outFileNamePrefix OUTPURNAME_star \
  --readFilesIn INPUT_1.fq INPUT_2.fq
 ```
+`runMode` tells that we are running STAR for aligning the reads, `runThreadN` is to make the run faster (use more CPUs), `genomeDir` is where the index files are located (from the previous command), `readFilesCommand` tells that the files we are providing as input are compressed (gz) and it needs to be uncompressed before aligning,  `outFileNamePrefix` prefix for the output files, and finally, the input files (2, forward and reverse).
 
 Since we need to run this for all 12 files, we will create a submission script and run them all separately.
 
