@@ -73,6 +73,43 @@ STAR \
 
 Now, if you run this as:
 ```
+chmod +x runSTAR.sh
 ./runSTAR.sh SRR6827002_trimmed_1.fq SRR6827002_trimmed_2.fq
 ```
 it will execute  the STAR aligner with all the options that you put in that run script. It is easier to run like this on many files (12 in this case)
+
+
+Copy the slurm script from your home directory:
+
+```
+cp ~/template.sub ./star.sub
+```
+edit this file to add the runSTAR commands.
+
+```
+nano star.sub
+```
+
+```
+#!/bin/bash
+#SBATCH -J star
+#SBATCH -N 1
+#SBATCH  -n 16
+#SBATCH -t 24:00:00
+#SBATCH -o star.stdout
+#SBATCH -e star.stderr
+#SBATCH --mail-user=username@gmail.com
+#SBATCH --mail-type=begin
+#SBATCH --mail-type=end
+module load star
+./runSTAR.sh SRR6827002_trimmed_1.fq SRR6827002_trimmed_2.fq
+..
+..
+..
+(12 such commands)
+```
+
+run the sbatch script:
+```
+sbatch star.sub
+```
