@@ -27,7 +27,7 @@ Next, open a interactive session:
 salloc -N 1 -n 16 -t 8:00:00
 module load subread
 featureCounts -t exon -g gene_id -p -B -T 16 -a Mus_musculus.GRCm38.92.gtf  -o count-exon.txt SRR6826996_starAligned.out.sam
-featureCounts -t exon -g gene_id -p -B -T 16 -a Mus_musculus.GRCm38.92.gtf  -o count-gene.txt SRR6826996_starAligned.out.sam
+featureCounts -t gene -g gene_id -p -B -T 16 -a Mus_musculus.GRCm38.92.gtf  -o count-gene.txt SRR6826996_starAligned.out.sam
 ```
 
 What is the difference between the two count files?
