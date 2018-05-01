@@ -115,3 +115,5 @@ run the sbatch script:
 ```
 sbatch star.sub
 ```
+
+You should have 12 SAM files once the job is complete.
