@@ -1,0 +1,3 @@
+# Differential Gene Expression analysis
+
+For this part, we will use `edgeR` program. You can read more about `edgeR` [here](http://bioconductor.org/packages/release/bioc/html/edgeR.html). `edgeR` supports differential expression analysis of RNA-seq expression profiles (count data) with biological replication. It implements a range of statistical methodology based on the negative binomial distributions, including empirical Bayes estimation, exact tests, generalized linear models and quasi-likelihood tests. This program can also be used for any other counts like genomic data generated from ChIP-seq, Bisulfite-seq, SAGE and CAGE.
