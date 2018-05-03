@@ -26,7 +26,7 @@ Geneid  Chr     Start   End     Strand  Length  SRR6826996_starAligned.out.sam .
 we will clean this up, so that we remove `_starAligned.out.sam` from the headers. We will also be not needing `Chr`, `Start`, `End`, `Strand`, and `Length`.
 
 ```
-cut -f 1,7- counts.txt > counts_clean.txt
+cut -f 1,7- count.txt |grep -v "^#" > counts_clean.txt
 sed -i 's/_starAligned.out.sam//g' counts_clean.txt
 ```
 
@@ -50,3 +50,87 @@ The experiment layout was as follows:
 
 So, we will prepare individual files (counts), with
 control vs. 4hrs, control vs. 24hrs and control vs. 3dp. If you are interested, you can also do other comparisons such as 4hrs vs. 24hrs, 4hrs vs. 3dp, 24hrs vs. 3dp.
+
+First, take a look at the header:
+
+```
+head -n 1 counts_clean.txt |tr "\t" "\n" |nl
+```
+
+Now, use the combinations of `cut` or `awk` command to generate the desired comparison file.
+
+eg:
+
+```
+awk '{print $1,$2,$3,$4,$5,$6,$7}' counts_clean.txt > control_4hrs.txt
+```
+or
+
+```
+cut -f 1-7 counts_clean.txt > control_4hrs.txt
+```
+
+generate all the files needed for next step (contro_24hrs.txt, control_3dp.txt)
+
+
+## DGE
+
+
+Below is the sample code for performing the analysis:
+
+
+```
+# import data
+datain <- read.delim("control_4hrs.txt",row.names="Geneid")
+
+# experimental design
+DataGroups <- c("CTL", "CTL","CTL", "TRT", "TRT", "TRT")
+
+# load edgeR
+library(edgeR)
+
+# create DGE object of edgeR
+dgList <- DGEList(counts=datain,group=factor(DataGroups))
+
+# filter data to retain genes that are represented at least 1 counts per million (cpm) in at least 2 samples
+countsPerMillion <- cpm(dgList)
+countCheck <- countsPerMillion > 1
+keep <- which(rowSums(countCheck) >= 2)
+dgList <- dgList[keep,]
+dgList$samples$lib.size <- colSums(dgList$counts)
+
+# normalization using TMM method
+dgList <- calcNormFactors(dgList, method="TMM")
+
+## data exploration
+# MDS plot
+png("plotmds.png")
+plotMDS(dgList, method="bcv", col=as.numeric(dgList$samples$group))
+dev.off()
+
+# Dispersion estimates
+design.mat <- model.matrix(~ 0 + dgList$samples$group)
+colnames(design.mat) <- levels(dgList$samples$group)
+dgList <- estimateGLMCommonDisp(dgList,design.mat)
+dgList <- estimateGLMTrendedDisp(dgList,design.mat, method="power")
+dgList <- estimateGLMTagwiseDisp(dgList,design.mat)
+png("plotbcv.png")
+plotBCV(dgList)
+dev.off()
+
+# Differentail expression analysis
+fit <- glmFit(dgList, design.mat)
+lrt <- glmLRT(fit, contrast=c(1,-1))
+edgeR_results <- topTags(lrt, n=Inf)
+
+# plot log2FC of genes and highlight the DE genes
+deGenes <- decideTestsDGE(lrt, p=0.05)
+deGenes <- rownames(lrt)[as.logical(deGenes)]
+png("plotsmear.png")
+plotSmear(lrt, de.tags=deGenes)
+abline(h=c(-1, 1), col=2)
+dev.off()
+ 
+# save the results as a table
+write.table(edgeR_results, file="Results_edgeR.txt")
+```
